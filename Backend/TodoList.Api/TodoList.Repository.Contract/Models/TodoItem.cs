@@ -1,6 +1,6 @@
 using System;
 
-namespace TodoList.Api
+namespace TodoList.Repository.Contract
 {
     public class TodoItem
     {

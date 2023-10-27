@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoList.Api", "TodoList.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoList.Api.UnitTests", "TodoList.Api.UnitTests\TodoList.Api.UnitTests.csproj", "{2BBBFEED-85B6-4361-85B2-F9E08C86C55B}"
 EndProject
+Project("{459CF720-4E6A-4E0B-ACD9-9831BA540AC3}") = "TodoList.Repository.EF", "TodoList.Repository.EF\TodoList.Repository.EF.csproj", "{F35ED7D1-092D-472E-B4EC-A0BD3E2F20D9}"
+EndProject
+Project("{04A43189-653A-4865-99D4-1741BC3E06EF}") = "TodoList.Repository.Contract", "TodoList.Repository.Contract\TodoList.Repository.Contract.csproj", "{EDA4CDC8-7D9B-4AD0-BD7D-1C66773C0C76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2BBBFEED-85B6-4361-85B2-F9E08C86C55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BBBFEED-85B6-4361-85B2-F9E08C86C55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BBBFEED-85B6-4361-85B2-F9E08C86C55B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F35ED7D1-092D-472E-B4EC-A0BD3E2F20D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F35ED7D1-092D-472E-B4EC-A0BD3E2F20D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F35ED7D1-092D-472E-B4EC-A0BD3E2F20D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F35ED7D1-092D-472E-B4EC-A0BD3E2F20D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDA4CDC8-7D9B-4AD0-BD7D-1C66773C0C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA4CDC8-7D9B-4AD0-BD7D-1C66773C0C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA4CDC8-7D9B-4AD0-BD7D-1C66773C0C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA4CDC8-7D9B-4AD0-BD7D-1C66773C0C76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

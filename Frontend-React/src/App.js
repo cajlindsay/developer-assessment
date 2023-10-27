@@ -1,113 +1,24 @@
 import './App.css'
 import { Image, Alert, Button, Container, Row, Col, Form, Table, Stack } from 'react-bootstrap'
 import React, { useState, useEffect } from 'react'
+import api from './api'
 
-const axios = require('axios')
-
-const App = () => {
-  const [description, setDescription] = useState('')
+export default function App() {
   const [items, setItems] = useState([])
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    // todo
+    getItems()
   }, [])
-
-  const renderAddTodoItemContent = () => {
-    return (
-      <Container>
-        <h1>Add Item</h1>
-        <Form.Group as={Row} className="mb-3" controlId="formAddTodoItem">
-          <Form.Label column sm="2">
-            Description
-          </Form.Label>
-          <Col md="6">
-            <Form.Control
-              type="text"
-              placeholder="Enter description..."
-              value={description}
-              onChange={handleDescriptionChange}
-            />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="mb-3 offset-md-2" controlId="formAddTodoItem">
-          <Stack direction="horizontal" gap={2}>
-            <Button variant="primary" onClick={() => handleAdd()}>
-              Add Item
-            </Button>
-            <Button variant="secondary" onClick={() => handleClear()}>
-              Clear
-            </Button>
-          </Stack>
-        </Form.Group>
-      </Container>
-    )
-  }
-
-  const renderTodoItemsContent = () => {
-    return (
-      <>
-        <h1>
-          Showing {items.length} Item(s){' '}
-          <Button variant="primary" className="pull-right" onClick={() => getItems()}>
-            Refresh
-          </Button>
-        </h1>
-
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.description}</td>
-                <td>
-                  <Button variant="warning" size="sm" onClick={() => handleMarkAsComplete(item)}>
-                    Mark as completed
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </>
-    )
-  }
-
-  const handleDescriptionChange = (event) => {
-    // todo
-  }
 
   async function getItems() {
     try {
-      alert('todo')
+      const { data } = await api.get('/toDoItems')
+      data.sort((a, b) => (a.description > b.description ? -1 : 1))
+      setItems(data)
     } catch (error) {
       console.error(error)
-    }
-  }
-
-  async function handleAdd() {
-    try {
-      alert('todo')
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  function handleClear() {
-    setDescription('')
-  }
-
-  async function handleMarkAsComplete(item) {
-    try {
-      alert('todo')
-    } catch (error) {
-      console.error(error)
+      setError('An unexpected error has occurred')
     }
   }
 
@@ -140,14 +51,19 @@ const App = () => {
                 <li>Feel free to add unit tests and refactor the component(s) as best you see fit</li>
               </ol>
             </Alert>
+            {error && <Alert variant="danger">{error}</Alert>}
           </Col>
         </Row>
         <Row>
-          <Col>{renderAddTodoItemContent()}</Col>
+          <Col>
+            <ToDoItemForm handleToDoItemAdded={getItems} handleSetError={setError} />
+          </Col>
         </Row>
         <br />
         <Row>
-          <Col>{renderTodoItemsContent()}</Col>
+          <Col>
+            <ToDoItemsContent items={items} handleRefreshItems={getItems} handleSetError={setError} />
+          </Col>
         </Row>
       </Container>
       <footer className="page-footer font-small teal pt-4">
@@ -162,4 +78,102 @@ const App = () => {
   )
 }
 
-export default App
+function ToDoItemForm({ handleToDoItemAdded, handleSetError }) {
+  const [description, setDescription] = useState('')
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value)
+  }
+
+  async function handleAdd() {
+    try {
+      await api.post('/toDoItems', { description })
+      handleClear()
+      await handleToDoItemAdded()
+    } catch (error) {
+      const { response } = error
+      const errorMessage = response.status === 400 ? response.data : 'An unexpected error has occurred'
+      handleSetError(errorMessage)
+    }
+  }
+
+  function handleClear() {
+    setDescription('')
+    handleSetError(null)
+  }
+
+  return (
+    <Container>
+      <h1>Add Item</h1>
+      <Form.Group as={Row} className="mb-3" controlId="formAddTodoItem">
+        <Form.Label column sm="2">
+          Description
+        </Form.Label>
+        <Col md="6">
+          <Form.Control
+            type="text"
+            placeholder="Enter description..."
+            value={description}
+            onChange={handleDescriptionChange}
+          />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3 offset-md-2" controlId="formAddTodoItem">
+        <Stack direction="horizontal" gap={2}>
+          <Button variant="primary" onClick={() => handleAdd()}>
+            Add Item
+          </Button>
+          <Button variant="secondary" onClick={() => handleClear()}>
+            Clear
+          </Button>
+        </Stack>
+      </Form.Group>
+    </Container>
+  )
+}
+
+function ToDoItemsContent({ items, handleRefreshItems, handleSetError }) {
+  async function handleMarkAsComplete(item) {
+    try {
+      await api.put(`/toDoItems/${item.id}`, { id: item.id, isCompleted: true })
+      await handleRefreshItems()
+    } catch (error) {
+      console.error(error)
+      handleSetError('An unexpected error has occurred')
+    }
+  }
+
+  return (
+    <>
+      <h1>
+        Showing {items.length} Item(s){' '}
+        <Button variant="primary" className="pull-right" onClick={() => handleRefreshItems()}>
+          Refresh
+        </Button>
+      </h1>
+
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.id} data-testid={`todo-item-row-${item.id}`}>
+              <td>{item.id}</td>
+              <td>{item.description}</td>
+              <td>
+                <Button variant="warning" size="sm" onClick={() => handleMarkAsComplete(item)}>
+                  Mark as completed
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </>
+  )
+}

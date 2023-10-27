@@ -22,4 +22,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup> 
 
+  <ItemGroup>
+    <ProjectReference Include="..\TodoList.Repository.EF\TodoList.Repository.EF.csproj" />
+    <ProjectReference Include="..\TodoList.Repository.Contract\TodoList.Repository.Contract.csproj" />
+  </ItemGroup>
+
 </Project>
