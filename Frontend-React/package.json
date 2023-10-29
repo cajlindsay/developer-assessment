@@ -19,7 +19,7 @@
     "start": "cross-env BROWSER=chrome react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "test:run-docker": "docker run -it --ipc=host --user $(id -u) -v $(pwd):/app -p 9323:9323 mcr.microsoft.com/playwright:v1.39.0-jammy /bin/bash",
+    "start:playwright": "docker run -w /app -it --ipc=host --user $(id -u) -v $(pwd):/app -p 9323:9323 mcr.microsoft.com/playwright:v1.39.0-jammy /bin/bash",
     "test": "playwright test --config ./playwright.config.js"
   },
   "eslintConfig": {

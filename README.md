@@ -1,27 +1,27 @@
-# Developer Assessment
+Hi there! 
 
-This repository contains code used in the interview process for developers joining the Microsoft Engineering Practice at ClearPoint.
+I have completed the assessment with the following changes:
 
-The application is a simple to-do list that allows a user to create items in a list and mark them as complete.
-The front end application uses a Microsoft Web API at the backend to facilitate using and persisting items in this to-do list.
+## Backend
+- Refactored the data access code into separate projects. There is a repository contract project containing the models and interfaces, and a repository Entity Framework project that contains the EF implmentation of the repository contract.
+- Updated the api to use the new repository contract. I have used dependency injection to inject the EF repository implementation into the TodoItemsController.
+- Added unit tests for the TodoItemsController using XUnit as the test runner and Moq as the mocking framework.
 
-The repository includes a **React-based** as well as an **Angular-based** front end application. You can choose either of these frameworks to implement your changes.
-<br/>
+## React Frontend
+- Implemented all of the functionality requested to make the user interface work.
+- Some minor refactoring to add a little clarity to the App component.
+- Added visual snapshot tests using Playwright. I find visual snapshot tests to be thorough, easy to write and an interesting discussion topic so take a look and see what you think.
 
-You are required to make changes to **both** the front end and back end.
+## Angular Frontend
+- Removed, as not needed.
 
-**The back end functionality requires the following to be added:**
+## NOTES on running the Playwright tests
+The Playwright tests take visual snapshots of the screen as the user would see them and compare them against stored snapshots to validate that they are the same. The naming convention of the stored snapshots includes both the browser and the operating system that the tests are running on. So that all developers can run the tests regardless of their OS and browser I have configured the tests to run inside the official playwright docker image.
 
-You are asked to refactor the back end code in this solution. This code is in the Backend folder. You are free to make changes as and where you see fit. Think about how you might structure the solution, add appropriate tests using a framework of your choice, and leave the solution in a more maintainable and more easily understood state than it was originally.
+To run the Playwright tests run the following commands in the Frontend-React project:
 
-**The front end functionality requires the following to be added:**
+1. ```npm run start:playwright``` to open an interactive shell inside the running playwright docker container.
 
-1. The ability to surface any errors from the backend API in the UI
-2. The ability to mark an item in the to-do list as complete
-3. Add unit tests to cover the new functionality using a framework of your choice
+3. ```npm run test``` to run the playwright tests.
 
-Remember that maintainability and clarity is key in your solution.
-You are welcome to use comments in the code to outline any assumptions you might make and/or outline your thinking at various points.
-Once completed please push the completed solution to your own repo and send us the link.
-<br/><br/>
-We look forward to seeing your submission and have fun!
+If any of the tests fail, you can view the HTML report and visual snapshot comparisons at http://localhost:9323
